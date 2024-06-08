@@ -148,7 +148,7 @@ public class ProtocInvokerTest extends BaseTest {
     }
 
     @Test
-    public void testCanCleanTampFolder() {
+    public void testCanCleanTampFolder() throws IOException {
         ProtocInvoker protocInvoker =
                 ProtocInvoker.forConfig(PROTO_FOLDER.toAbsolutePath().toString(), "");
         protocInvoker.invoke();

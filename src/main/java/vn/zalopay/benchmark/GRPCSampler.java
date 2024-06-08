@@ -3,6 +3,7 @@ package vn.zalopay.benchmark;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 
+import java.io.IOException;
 import org.apache.jmeter.samplers.AbstractSampler;
 import org.apache.jmeter.samplers.Entry;
 import org.apache.jmeter.samplers.SampleResult;
@@ -329,12 +330,20 @@ public class GRPCSampler extends AbstractSampler implements ThreadListener, Test
     @Override
     public void testEnded() {
         log.info("testEnded");
-        ProtocInvoker.cleanTempFolderForGeneratingProtoc();
-    }
+				try {
+						ProtocInvoker.cleanTempFolderForGeneratingProtoc();
+				} catch (IOException e) {
+						throw new RuntimeException(e);
+				}
+		}
 
     @Override
     public void testEnded(String s) {
         log.info("testEnded {}", s);
-        ProtocInvoker.cleanTempFolderForGeneratingProtoc();
-    }
+				try {
+						ProtocInvoker.cleanTempFolderForGeneratingProtoc();
+				} catch (IOException e) {
+						throw new RuntimeException(e);
+				}
+		}
 }

@@ -1,5 +1,11 @@
 package vn.zalopay.benchmark.core.protobuf;
 
+
+
+
+
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+
 import com.github.os72.protocjar.Protoc;
 import com.github.os72.protocjar.ProtocVersion;
 import com.google.common.base.Preconditions;
@@ -84,10 +90,28 @@ public class ProtocInvoker {
                 .collect(Collectors.toList());
     }
 
-    public static void cleanTempFolderForGeneratingProtoc() {
-        PROTO_TEMP_FOLDER_PATHS.forEach(
-                path -> FileUtils.deleteQuietly(new File(path.toAbsolutePath().toString())));
-    }
+		public static void cleanTempFolderForGeneratingProtoc() throws IOException {
+
+				for(Path path : PROTO_TEMP_FOLDER_PATHS){
+						File file = new File(path.toAbsolutePath().toString());
+						if(file.isDirectory()) {
+								deleteDirectory(file);
+						}else {
+								file.delete();
+						}
+				}
+
+				File tempDir = new File(System.getProperty("java.io.tmpdir"));
+				for (File file : Objects.requireNonNull(tempDir.listFiles())) {
+						if (file.getName().startsWith("protocjar")) {
+								if (file.isDirectory()) {
+										deleteDirectory(file);
+								}else {
+										file.delete();
+								}
+						}
+				}
+		}
 
     /**
      * Executes protoc on all .proto files in the subtree rooted at the supplied path and returns a
